@@ -5,6 +5,8 @@ import InfoOutlinedIcon from '@material-ui/icons/InfoOutlined';
 import InsertDriveFileIcon from '@material-ui/icons/InsertDriveFile';
 import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
 import styled from 'styled-components';
+import { useEffect, useState } from 'react';
+import { db } from '../firebase';
 
 
 const DataContainer = styled.div`
@@ -75,8 +77,69 @@ const DataListRow = styled.div`
 `
 
 const Data = () => {
+    const [files, setFiles] = useState([]);
+
+    useEffect(() => {
+        db.collection("myfiles").onSnapshot(snapshot => {
+            setFiles(snapshot.docs.map(doc => ({
+                id: doc.id,
+                data: doc.data()
+            })))
+        })
+    },[])
+
+    const changeBytes = (bytes, decimals = 2) => {
+        if (bytes === 0) return '0 Bytes';
+        const k = 1024;
+        const dm = decimals < 0 ? 0 : decimals;
+        const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
+        const i = Math.floor(Math.log(bytes) / Math.log(k));
+        return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
+    }
+
   return (
-    <DataContainer>Data</DataContainer>
+    <DataContainer>
+        <DataHeader>
+            <div className='headerLeft'>
+            <p>My Drive</p>
+            <ArrowDropDownIcon />
+            </div>
+
+            <div className='headerRight'>
+            <ListIcon />
+            <InfoOutlinedIcon />
+            </div>
+        </DataHeader>
+
+        <div>
+            <DataGrid>
+            {files.map(file => (
+                        <DataFile key={file.id}>
+                            <InsertDriveFileIcon />
+                            <p>{file.data.filename}</p>
+                        </DataFile>
+                    ))}
+            </DataGrid>
+            <div>
+                <DataListRow>
+                <p><b>Name <ArrowDownwardIcon /></b></p>
+                        <p><b>Owner</b></p>
+                        <p><b>Last Modified</b></p>
+                        <p><b>File Size</b></p>
+                </DataListRow>
+                {files.map(file => (
+                        <DataListRow key={file.id}>
+                            <a href={file.data.fileURL} target='_blank'>
+                                <p><InsertDriveFileIcon /> {file.data.filename}</p>
+                            </a>
+                            <p>Owner </p>
+                            <p>{new Date(file.data.timestamp?.seconds*1000).toUTCString()}</p>
+                            <p>{changeBytes(file.data.size)}</p>
+                        </DataListRow>
+                    ))}
+            </div>
+        </div>
+    </DataContainer>
   )
 }
 
