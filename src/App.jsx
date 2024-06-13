@@ -18,20 +18,7 @@ const LoginWrapper = styled.div`
   img {
     width: 100px;
   }
-  button {
-    width: 100%;
-    background: darkmagenta;
-    padding: 10px 20px;
-    color: #fff;
-    text-transform: uppercase;
-    letter-spacing: 5px;
-    font-size: 16px;
-    border: 0;
-    outline: 0;
-    border-radius: 5px;
-    cursor: pointer;
-    margin-top: 20px;
-  }
+  
 `;
 
 function App() {
