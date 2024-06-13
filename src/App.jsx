@@ -38,19 +38,19 @@ function App() {
   const [user, setUser] = useState(null);
 
   const signIn = () => {
-    console.log('SignIn function called'); // Debug log
+    console.log('SignIn function called'); 
     auth.signInWithPopup(provider)
       .then(({ user }) => {
-        console.log('User signed in:', user); // Debug log
+        console.log('User signed in:', user); 
         setUser(user);
       })
       .catch(err => {
-        console.error('Sign in error:', err); // Debug log
+        console.error('Sign in error:', err); 
         alert(err);
       });
   };
 
-  console.log('App component rendered with user:', user); // Debug log
+  console.log('App component rendered with user:', user); 
 
   return (
     <>
