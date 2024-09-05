@@ -30,7 +30,7 @@ function App() {
       .then(({ user }) => {
         console.log('User signed in:', user); 
         setUser(user);
-      })
+      }) 
       .catch(err => {
         console.error('Sign in error:', err); 
         alert(err);
@@ -57,3 +57,7 @@ function App() {
 }
 
 export default App;
+
+
+
+//All set for the deployment.
